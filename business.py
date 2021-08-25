@@ -1,33 +1,32 @@
 from apiHandler import requestHandler
 from geoComputer import geoComputer
+from tester import tester
 
 
 class Business:
-    _rh=requestHandler()
+    """
+    Business class calls and handles the classes apiHandler and geoComputer. It is where both classes are connected.
+    """
+    _rh = requestHandler()
     _gc = geoComputer()
+    _tester = tester()
     _coordenates = []
     _distances = []
     def __init__(self):
         pass
 
-    def test_string(self,address):
-        t=type(address) == str
-        assert t, "not a string"
-
-    def test_alnum(self, address):
-        t=address.replace(" ", "").isalnum()
-        assert t, "it only accept digits and letters"
-
-    def test_is_valid(self, address):
-        self.test_string(address)
-        self.test_alnum(address)
-
-    # TODO: chanege name
     def process_request(self, address):
-        self.test_is_valid(address)
+        """
+        Calls the functions from the classes apiHandler and geoComputer that generates the data. Returns a list of
+        dictionaries that contain a match for the requested address and its respectively distance (in longitude and
+        latitude degrees) from MKAD. If no results is found, returns a simple string.
+        :param address: string
+        :return: list[dict]
+        """
+        self._tester.test_is_valid(address)
         address=address.strip()
         response=self._rh.request_addresses(address.replace(" ", "+"))
-        if response==None:
+        if response == None:
             with open ('log.txt', 'a') as file:
                 file.write(address + "not found\n")
             return "No results found"

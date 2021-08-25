@@ -6,6 +6,11 @@ from shapely.geometry import Point, Polygon
 
 
 class geoComputer():
+    """
+    geoComputer uses the package "geopandas" to calculate the distance between the centroid of Moscow Ring Road and a
+    given point and to test if this point is inside the MKAD. The _MKAD object is a geoSeries data struct that contains
+    all the points to create a Polygon representing the Moscow Ring Road.
+    """
 
     _pl = Polygon([(37.842762, 55.774558), (37.842789, 55.76522), (37.842627, 55.755723), (37.841828, 55.747399),
                    (37.841217, 55.739103), (37.840175, 55.730482), (37.83916, 55.721939), (37.837121, 55.712203),
@@ -42,14 +47,31 @@ class geoComputer():
         pass
 
     def create_Geoseries(self, longit, latitu):
+        """
+        Function that creates a geoSeries object (from geopandas package) with a given point in longitude and latitude degrees.
+        :param longit: float
+        :param latitu: float
+        :return: Geoseries
+        """
         return GeoSeries([Point(longit, latitu)])
 
     def is_in_MKAD(self, s):
+        """
+        Function that verifies if a given poin is in MKAD
+        :param s: GeoSeries
+        :return: dtype('bool')
+        """
         res = self._MKAD.contains(s)
         print(res)
         return res
 
     def calculate_distance(self,s):
+        """
+        Function that uses geoSeries to calculate the distance between the input (as point) and the centroid
+        of Moscow Ring Road geoSeries.
+        :param s: geoSeries
+        :return: Series
+        """
         distance = self._MKAD.centroid.distance(s)
         k = self._MKAD.contains(s)
         return distance
