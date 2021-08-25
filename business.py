@@ -28,13 +28,14 @@ class Business:
         address=address.strip()
         response=self._rh.request_addresses(address.replace(" ", "+"))
         if response==None:
+            with open ('log.txt', 'a') as file:
+                file.write(address + "not found\n")
             return "No results found"
         else:
             self._coordenates.clear()
             for i in range(len(response)):
                 aux1 = response[i]['pos'].split(" ")
                 self._coordenates.append([float(aux1[0]), float(aux1[1])])
-            #print(self._coordenates)
 
             self._distances.clear()
             for i in self._coordenates:
@@ -48,7 +49,6 @@ class Business:
                     kj=float(kj)
                     self._distances.append(kj)
                 else:
-                    print("fazendo oq")
                     self._distances.append(0)
 
             final=[]
@@ -61,6 +61,9 @@ class Business:
                 for k in i:
                     print(k, i[k])
 
+            with open ('log.txt', 'a') as file:
+                for i in final:
+                    file.write(str(i)+"\n")
 
             return final
 

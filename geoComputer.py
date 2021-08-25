@@ -2,7 +2,7 @@ import sys
 sys.path.append(r'./venv/lib/python3.8/site-packages/geopandas')
 
 from geopandas import GeoSeries
-from shapely.geometry import LineString, Point, Polygon
+from shapely.geometry import Point, Polygon
 
 
 class geoComputer():
@@ -46,7 +46,6 @@ class geoComputer():
 
     def is_in_MKAD(self, s):
         res = self._MKAD.contains(s)
-        print("---------------IN MKAD------")
         print(res)
         return res
 

@@ -8,6 +8,7 @@ class requestHandler():
     def __init__(self):
         pass
 
+    #examples:
     #Moskovskaya+Kol+tsevaya+Avtomobil+naya+Doroga
     #Moskovskaya Kol tsevaya Avtomobil naya Doroga
     #Sultanahmet+Camii+İç+Yolları
