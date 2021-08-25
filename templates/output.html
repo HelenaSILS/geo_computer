@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+   <head>
+      <h1>Welcome!</h1>
+   </head>
+   <title>
+      Geo Distance
+   </title>
+   <body>
+
+      <h3>Matching results:</h3>
+
+      <ul>
+      {% for i in addressform %}
+         {%for k, v in i.items() %}
+            {%if k.rfind("MKAD")!=-1 or v==0%}
+               <li>{{k}} already in Moscow Ring Road </li>
+            {%else%}
+               <li>{{k}}, {{v}} degrees, or {{"%.2f"|format(v*111.11)}}km</li>
+            {%endif%}
+         {%endfor%}
+      {%endfor%}
+      </ul>
+
+   </body>
+</html>

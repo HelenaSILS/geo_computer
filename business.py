@@ -1,4 +1,3 @@
-import sys
 from apiHandler import requestHandler
 from geoComputer import geoComputer
 
@@ -11,20 +10,23 @@ class Business:
     def __init__(self):
         pass
 
-    def isvalid(self, address):
-        if type(address) != str:
-            return False
-        elif not address.replace(" ","").isalnum():
-            return False
-        else:
-            return True
+    def test_string(self,address):
+        t=type(address) == str
+        assert t, "not a string"
 
-    def sendyandex(self,address):
+    def test_alnum(self, address):
+        t=address.replace(" ", "").isalnum()
+        assert t, "it only accept digits and letters"
 
-        if not self.isvalid(address):
-            return "Invalid address, please try with a different one"
+    def test_is_valid(self, address):
+        self.test_string(address)
+        self.test_alnum(address)
 
-        response=self._rh.getAddesses(address.replace(" ", "+"))
+    # TODO: chanege name
+    def process_request(self, address):
+        self.test_is_valid(address)
+        address=address.strip()
+        response=self._rh.request_addresses(address.replace(" ", "+"))
         if response==None:
             return "No results found"
         else:
@@ -32,7 +34,7 @@ class Business:
             for i in range(len(response)):
                 aux1 = response[i]['pos'].split(" ")
                 self._coordenates.append([float(aux1[0]), float(aux1[1])])
-            print(self._coordenates)
+            #print(self._coordenates)
 
             self._distances.clear()
             for i in self._coordenates:
@@ -41,12 +43,26 @@ class Business:
                 if inMKD.bool() == False:
                     k=self._gc.calculate_distance(serie)
                     kj=k.to_json()
-                    self._distances.append(k.to_json())
-                    print("***")
-                    print(k.to_json())
+                    kj=str(kj)
+                    kj=kj[5:-1]
+                    kj=float(kj)
+                    self._distances.append(kj)
                 else:
+                    print("fazendo oq")
                     self._distances.append(0)
-            return self._distances
+
+            final=[]
+            for i in range(len(response)):
+                aux1 = response[i]['address']['formatted']
+                aux2= self._distances[i]
+                aux_d={aux1:aux2}
+                final.append(aux_d)
+            for i in final:
+                for k in i:
+                    print(k, i[k])
+
+
+            return final
 
 
 

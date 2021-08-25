@@ -9,19 +9,20 @@ class requestHandler():
         pass
 
     #Moskovskaya+Kol+tsevaya+Avtomobil+naya+Doroga
+    #Moskovskaya Kol tsevaya Avtomobil naya Doroga
     #Sultanahmet+Camii+İç+Yolları
+    #Sultanahmet Camii İç Yolları
 
-    def getAddesses(self, string):
-        address = "Sultanahmet+Camii+İç+Yolları"
+    def request_addresses(self, address):
         url = "https://geocode-maps.yandex.ru/1.x/?apikey={0}&format=json&geocode={1}&lang=en-US".format(self._KEY, address)
         response = requests.get(url)
-        #TODO: VERIFICAR SE A RESPOSTA É JSON MESMO
+
         rJson = response.content
         r=json.loads(rJson)
 
         n_found = (r["response"]["GeoObjectCollection"]["metaDataProperty"]["GeocoderResponseMetaData"]["found"])
         n_found = int(n_found)
-
+        # TODO: VERIFICAR SE A RESPOSTA É JSON MESMO
         if n_found==0:
             return None
 
@@ -32,7 +33,6 @@ class requestHandler():
             aux1=featureMembers[i]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]
             aux2=featureMembers[i]["GeoObject"]["Point"]["pos"]
             addresses_found[i]={"address":aux1, "pos": aux2}
-            print(addresses_found[i])
 
         return addresses_found
 
