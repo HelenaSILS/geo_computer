@@ -1,0 +1,51 @@
+import sys
+sys.path.append(r'./PycharmProjects/geo_computer/venv/lib/python3.8/site-packages/geopandas')
+from flask import Flask, jsonify, render_template
+
+import geopandas
+
+import apiHandler
+
+from geopandas import GeoSeries
+
+from shapely.geometry import Polygon
+p1 = Polygon([(0, 0), (1, 0), (1, 1)])
+p2 = Polygon([(0, 0), (1, 0), (1, 1), (0, 1)])
+p3 = Polygon([(2, 0), (3, 0), (3, 1), (2, 1)])
+g = GeoSeries([p1, p2, p3])
+print("==========")
+print(g)
+print("==========")
+
+#from getAPIData import requestHandler
+#from admin import admin
+#api key: 4625ae9b-8da6-4d36-96de-823cd5a3732d
+
+
+app = Flask(__name__)
+
+#app.register_blueprint(admin)
+rh = apiHandler.requestHandler()
+
+rh.getPosition()
+
+@app.route('/')
+def hello_world():
+   return 'Hello World'
+
+@app.route('/hellojson')
+def hello_json():
+   return jsonify({"message": "hello json!"})
+
+@app.route('/index')
+def index():
+   nome = "Helena"
+   posts = ["Flask Basico", "Flask Intermediario", "Flask Avancado"]
+   return render_template("index.html", nome=nome, posts=posts)
+
+@app.route('/myoutput')
+def my_output():
+   return 'my output'
+
+if __name__ == '__main__':
+   app.run()
